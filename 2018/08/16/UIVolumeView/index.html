@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/layout4.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/layout5.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/layout3.png">
-<meta property="og:updated_time" content="2018-08-16T07:25:55.017Z">
+<meta property="og:updated_time" content="2018-08-16T07:32:51.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="客製化音量偵測UI！ UIVolumeView 全實作紀錄">
 <meta name="twitter:description" content="環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度分佈 對 kotlin 有一定程度了解 對Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！  正式開始開始吧！ 首先：建立class 繼承 View，並依照規範將三個需要">
@@ -361,7 +361,7 @@
 <p>繼承 View 要實作的細節和流程就不再多敘述，這裡僅實作onDraw方法，請先將 <span style="color:blue"> onDraw </span> 方法覆寫</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDraw</span><span class="params">(canvas: <span class="type">Canvas</span>?)</span></span> &#123;</span><br><span class="line">	<span class="keyword">super</span>.onDraw(canvas)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然後建立兩個 class member，用處之後說明：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIVolumeView</span> : <span class="type">View &#123;</span></span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> paint = Paint()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> path = Path()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?) : <span class="keyword">super</span>(context)</span><br><span class="line"></span><br><span class="line">   	<span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?) : <span class="keyword">super</span>(context, attrs)</span><br><span class="line"></span><br><span class="line">   	<span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?, defStyleAttr: <span class="built_in">Int</span>) : <span class="keyword">super</span>(context, attrs, defStyleAttr)</span><br><span class="line">   	</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDraw</span><span class="params">(canvas: <span class="type">Canvas</span>?)</span></span> &#123;</span><br><span class="line">		<span class="keyword">super</span>.onDraw(canvas)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIVolumeView</span> : <span class="type">View &#123;</span></span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> paint = Paint()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> path = Path()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?) : <span class="keyword">super</span>(context)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?) : <span class="keyword">super</span>(context, attrs)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?, defStyleAttr: <span class="built_in">Int</span>) : <span class="keyword">super</span>(context, attrs, defStyleAttr)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDraw</span><span class="params">(canvas: <span class="type">Canvas</span>?)</span></span> &#123;</span><br><span class="line">    	<span class="keyword">super</span>.onDraw(canvas)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上是最後完成的程式碼，build之後沒有錯誤的話，就成功了第一步</p>
 <h2 id="UI-設計概念"><a href="#UI-設計概念" class="headerlink" title="UI 設計概念"></a>UI 設計概念</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>再談設計概念之前，先來看一下這張完成圖片，相信有開發經驗的工程師們，一定都會得到UI/UX 設計師給的設計稿或切圖，以下這張圖應該算是張元件的完成圖：</p>
 <p><img src="layout1.png" alt=""></p>
@@ -375,10 +375,10 @@
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>既然選擇第三個方式，那就開始分析吧！ 我個人分析的習慣都是從大到小、外往內、上往下的概念分析：</p>
 <ul>
 <li>圖層：<ul>
-<li>有外往內分析：<ol>
-<li><img src="layout2.png" alt=""></li>
-<li><img src="layout4.png" alt=""></li>
-<li><img src="layout5.png" alt=""></li>
+<li>外往內分析：<ol>
+<li>整個畫布：<img src="layout2.png" alt=""></li>
+<li>三角形裁減區塊（之後說明）：<img src="layout4.png" alt=""></li>
+<li>底部刻度圖：<img src="layout5.png" alt=""></li>
 <li>最後一張上面所說的，兩個元件疊在一起的意思是，我其實是做了一個class ui，重複用了兩個，一個當前景、一個當背景</li>
 </ol>
 </li>
