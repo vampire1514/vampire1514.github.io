@@ -416,9 +416,9 @@
 <p>這個無法切圖，但我們可以剪裁，Canvas都有剪裁的功能可以使用。剪裁的概念範圍很大，在這裡僅使用 clipPath 做說明，其他的用法不是很了解，所以也不多做說明。</p>
 <p>首先，先說明clip 剪裁是剪裁出新畫布，也就是說：<strong>剪出來的區域是可以看得到的區域，要記得這個規則！</strong>，拿下圖來說明，我畫了一個全紅色的正方形，我對中間剪了一個正方形出來，會是這樣顯示：</p>
 <p><img src="Shape.png" alt=""></p>
-<p>白色的部分都變成是顯示不出來的區域，只有裁出來的那塊區域才能顯示紅色！</p>
-<p>所以，如果我們想剪裁出完成品，並不是剪裁三角形，而是剪裁一個不規則的四邊形，這也是為什麼我是使用 clipPath 的主要原因，一樣使用圖解來解說：</p>
-<p><img src="Shape2.png" alt=""></p>
+<p>剪裁後，白色的部分都變成是顯示不出來的區域，只有裁出來的那塊區域才能顯示紅色！</p>
+<p>所以，如果我們想剪裁出完成品，並不是剪裁三角形，而是剪裁一個不規則的四邊形，這也是為什麼我是使用 clipPath 的主要原因，一樣使用圖解來解說！</p>
+<p>圖中黑色的線，就是圈起來想要剪掉的區塊：<br><img src="Shape2.png" alt=""></p>
 <p>那為什麼這裡所說的是剪裁三角形，而不是剪裁不規則四邊形呢？其實因為以圖層來看，人正常的思考邏輯其實是剪裁三角形，白話的說是我圈出一個區域，這個區域是我不要的。</p>
 <p>而clipPath是圈出一個區域，這個區域是我要的。在實作的時候有看到 clipOutPath這個方法，但是這個方式是 API 26 才加入的，<br>有可能這個的使用方式就是反過來的，不深究囉。</p>
 <p>剪裁邏輯，就直接看code，只是圈了四個點，然後形成一個四邊形之後剪裁而已：</p>
@@ -455,7 +455,6 @@
 <blockquote>
 <p>onWindowFocusChanged</p>
 <blockquote>
-<p>volume.paintShader = LinearGradient(0f, 0f, volume.width.toFloat(), 0f, intArrayOf(Color.parseColor(“#1E9600”), Color.parseColor(“#FFF200”), Color.parseColor(“#FF0000”)), floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.REPEAT)</p>
 <p>當hasFocus的時候 UIVolumeView 才會有真正的 width，用該width 對 volume 設定漸層色，要不要設定隨便，總之就比較好看</p>
 </blockquote>
 </blockquote>
