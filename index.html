@@ -368,7 +368,7 @@
 <li>整個畫布：<img src="layout2.png" alt=""></li>
 <li>三角形裁減區塊（之後說明）：<img src="layout4.png" alt=""></li>
 <li>底部刻度圖：<img src="layout5.png" alt=""></li>
-<li>最後一張上面所說的，兩個元件疊在一起的意思是，我其實是做了一個class ui，重複用了兩個，一個當前景、一個當背景</li>
+<li>最後一張上面所說的，兩個元件疊在一起的意思是：我其實是做了一個class ui，重複用了兩個，一個當前景、一個當背景</li>
 </ol>
 </li>
 </ul>
@@ -379,7 +379,14 @@
 </ol>
 </li>
 </ul>
-
+<h3 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h3><p>Android Canvas，當繼承 View 之後，在 onDraw 的 call back 中就會接收到。</p>
+<p>只要當View建立完成，或是呼叫了 invaildate()，都會進入 onDraw 方法，用意在於叫開發者自行實作自己想要的結果。我的實作重點就在這個畫布上，它是完成這個UI的最重要的物件。</p>
+<p>當然我們一樣先來看一下，下面這張圖：<br><img src="full.png" alt=""></p>
+<p>這個樣式就是上面分析時所講到的第二點，三角形裁減區塊沒有使用的時候。</p>
+<p>要畫出等級刻度，其實很簡單，使用 drawPath 就可以了，example：（畫一條紅線）</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> paint = Paint()</span><br><span class="line">paint.color = Color.Red</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> mPath = Path()</span><br><span class="line">mPath.moveTo(<span class="number">0</span>f, <span class="number">0</span>f)</span><br><span class="line">mPath.lineTo(<span class="number">25</span>f, height.toFloat())</span><br><span class="line">canvas?.drawPath(mPath, paint)</span><br></pre></td></tr></table></figure>
+<p>簡單的範例一下，只是說明，要做出等級刻度，使用 canvas.drawPath 即可，這就是實作這個ui layout的第一步。</p>
+<h2 id="實作邏輯"><a href="#實作邏輯" class="headerlink" title="實作邏輯"></a>實作邏輯</h2>
           
         
       
