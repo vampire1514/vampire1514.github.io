@@ -341,7 +341,7 @@
 </ul>
 <h2 id="程度分佈"><a href="#程度分佈" class="headerlink" title="程度分佈"></a>程度分佈</h2><ul>
 <li>對 kotlin 有一定程度了解</li>
-<li>對Android 客製化 UI 有基礎認識</li>
+<li>對 Android 客製化 UI 有基礎認識</li>
 </ul>
 <h2 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h2><p>廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！</p>
 <p><img src="sample.gif" alt=""></p>
@@ -386,7 +386,30 @@
 <p>要畫出等級刻度，其實很簡單，使用 drawPath 就可以了，example：（畫一條紅線）</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> paint = Paint()</span><br><span class="line">paint.color = Color.Red</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> mPath = Path()</span><br><span class="line">mPath.moveTo(<span class="number">0</span>f, <span class="number">0</span>f)</span><br><span class="line">mPath.lineTo(<span class="number">25</span>f, height.toFloat())</span><br><span class="line">canvas?.drawPath(mPath, paint)</span><br></pre></td></tr></table></figure>
 <p>簡單的範例一下，只是說明，要做出等級刻度，使用 canvas.drawPath 即可，這就是實作這個ui layout的第一步。</p>
-<h2 id="實作邏輯"><a href="#實作邏輯" class="headerlink" title="實作邏輯"></a>實作邏輯</h2>
+<h2 id="實作邏輯"><a href="#實作邏輯" class="headerlink" title="實作邏輯"></a>實作邏輯</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>先來看張流程圖：<br><img src="Flow.png" alt=""></p>
+<p>說明一下其中兩大元件：</p>
+<ul>
+<li>UIVolumeView：我們自行客製化的元件，下面開始慢慢補完程式</li>
+<li>SeekBar：Android 的 Slider，用來控制 0 ~ 100 的進度，要demo UIVolumeView 所用</li>
+</ul>
+<p>流程圖中，SeekBar 接收到改變值，使用 setLevel改變 UIVolumeView的等級，一接收到就 invaildate() 重刷畫面，然後結束。之後反覆循環這個動作，UIVolumeView就會不停變化，<strong>但沒有動畫，動畫效果後面會提到。</strong></p>
+<p>流程圖的流程是裁減然後draw，但我要講解的時候，會反過來，先講 drawPath 再回頭講三角形裁減，這麼說明的原因其實是因為這裡的裁減邏輯跟原始畫出來的圖會有點關聯，先講解刻度的畫法會對裁減比較有感覺。</p>
+<h3 id="依-0-100-的等級畫出刻度"><a href="#依-0-100-的等級畫出刻度" class="headerlink" title="依 0 ~ 100 的等級畫出刻度"></a>依 0 ~ 100 的等級畫出刻度</h3><p>首先，找出刻度和刻度間隙的寬度，也就是每一刻的寬和每一刻中間的白色寬度。通過完成圖分析結果，發現每一刻對間隙，比值是 2:1 寬度，換句話說就是兩個間隙的寬度剛好等於一刻。</p>
+<p>就以此規則定義刻度和間隙的寬度吧，但是我們不能寫死寬度的計算，因此要先定義整個主圖層要畫多少刻，建立以下規格：</p>
+<ol>
+<li>25刻，一刻4%</li>
+<li>間隙總共：25 - 1 = 24</li>
+<li>套用2:1的規則，25 x 2 + 24 = 74 &lt;—- 74 就是我們要算得的線的結果</li>
+</ol>
+<p>用圖來詳細拆分一下什麼是 2:1<br><img src="full_detal.png" alt=""></p>
+<p>那為什麼要用這種分法呢？ 因為我這裡畫線的邏輯是用x跳格，然後一條線的寬度是 (view.width / 74 ) * 2 之後畫一條直線到 view.height 也就是最底部的 y。</p>
+<p>一樣用圖來解說：<br><img src="Flow2.png" alt=""></p>
+<p>接著帶入 for loop 畫線的核心程式碼</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//current 跟著 0 ~ 100 的 level 在畫線的時候要/4，因為這樣畫刻度的次數才是正確的</span></span><br><span class="line">   <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">drawAll</span><span class="params">(canvas: <span class="type">Canvas</span>?)</span></span> &#123;</span><br><span class="line">       path.reset()</span><br><span class="line"></span><br><span class="line">       <span class="keyword">val</span> avgWidth = width / <span class="number">74</span></span><br><span class="line">       <span class="keyword">val</span> oneScaleWidth = avgWidth * <span class="number">2</span></span><br><span class="line">       <span class="keyword">val</span> oneGapWidth = avgWidth</span><br><span class="line">       paint.strokeWidth = oneScaleWidth.toFloat()</span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0</span> until level step <span class="number">4</span>) &#123;</span><br><span class="line">           <span class="keyword">val</span> mPath = Path()</span><br><span class="line">           <span class="keyword">val</span> x = (avgWidth * <span class="number">3</span>) * (i / <span class="number">4</span>).toFloat()</span><br><span class="line"></span><br><span class="line">           <span class="comment">//總共25條，每條佔4%, 循環畫出</span></span><br><span class="line">           mPath.moveTo(x, <span class="number">0</span>f)</span><br><span class="line">           mPath.lineTo(x, height.toFloat())</span><br><span class="line">           path.addPath(mPath)</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       canvas?.drawPath(path, paint)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>從這裡就可以看到 for loop中，移動 x 時的計算，x 的移動其實是每次移動三格，除以四是為了畫出25刻，等於每四級畫一刻，不過這段程式碼中做了一個判斷，就是 i 只 loop 到 level，因為level是動態給予的，所以每次畫都只畫到level為止。(當然，level = 100 ，就畫到滿)</p>
+<p>接著把這段程式碼複製貼上到 UIVolumeView裡，完成此一階段。</p>
+<p>### </p>
+
           
         
       
