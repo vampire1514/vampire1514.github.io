@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！  正式開始開始吧！ 首先：建立class 繼承">
+<meta name="description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="客製化音量偵測UI！ UIVolumeView 全實作紀錄">
 <meta property="og:url" content="http://yoursite.com/2018/08/16/UIVolumeView/index.html">
 <meta property="og:site_name" content="Lex&#39;s Vision">
-<meta property="og:description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！  正式開始開始吧！ 首先：建立class 繼承">
+<meta property="og:description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/sample.gif">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/layout1.png">
@@ -99,10 +99,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/layout1.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/Shape.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/16/UIVolumeView/Shape2.png">
-<meta property="og:updated_time" content="2018-08-17T01:32:00.210Z">
+<meta property="og:updated_time" content="2018-08-17T01:43:26.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="客製化音量偵測UI！ UIVolumeView 全實作紀錄">
-<meta name="twitter:description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！  正式開始開始吧！ 首先：建立class 繼承">
+<meta name="twitter:description" content="Android Studio 環境配置 Android 6.0.1 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：無  程度需求 對 kotlin 有一定程度了解 對 Android 客製化 UI 有基礎認識  完成效果廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！">
 <meta name="twitter:image" content="http://yoursite.com/2018/08/16/UIVolumeView/sample.gif">
 
 
@@ -362,7 +362,8 @@
 <li>對 Android 客製化 UI 有基礎認識</li>
 </ul>
 <h2 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h2><p>廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！</p>
-<p><img src="sample.gif" alt=""></p>
+<img src="/2018/08/16/UIVolumeView/sample.gif" title="Sample">
+<a id="more"></a>
 <h2 id="正式開始"><a href="#正式開始" class="headerlink" title="正式開始"></a>正式開始</h2><h3 id="開始吧！-首先："><a href="#開始吧！-首先：" class="headerlink" title="開始吧！ 首先："></a>開始吧！ 首先：</h3><p>建立class 繼承 View，並依照規範將三個需要實作的建構子一起建立出來(我的習慣是使用constructor)</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIVolumeView</span> : <span class="type">View &#123;</span></span></span><br><span class="line"> 	<span class="keyword">constructor</span>(context: Context?) : <span class="keyword">super</span>(context)</span><br><span class="line"></span><br><span class="line">   	<span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?) : <span class="keyword">super</span>(context, attrs)</span><br><span class="line"></span><br><span class="line">   	<span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?, defStyleAttr: <span class="built_in">Int</span>) : <span class="keyword">super</span>(context, attrs, defStyleAttr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>繼承 View 要實作的細節和流程就不再多敘述，這裡僅實作onDraw方法，請先將 <span style="color:blue"> onDraw </span> 方法覆寫</p>
@@ -370,7 +371,6 @@
 <p>然後建立兩個 class member，用處之後說明：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIVolumeView</span> : <span class="type">View &#123;</span></span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> paint = Paint()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> path = Path()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?) : <span class="keyword">super</span>(context)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?) : <span class="keyword">super</span>(context, attrs)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">constructor</span>(context: Context?, attrs: AttributeSet?, defStyleAttr: <span class="built_in">Int</span>) : <span class="keyword">super</span>(context, attrs, defStyleAttr)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onDraw</span><span class="params">(canvas: <span class="type">Canvas</span>?)</span></span> &#123;</span><br><span class="line">    	<span class="keyword">super</span>.onDraw(canvas)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上是最後完成的程式碼，build之後沒有錯誤的話，就成功了第一步</p>
-<a id="more"></a>
 <h2 id="UI-設計概念"><a href="#UI-設計概念" class="headerlink" title="UI 設計概念"></a>UI 設計概念</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>再談設計概念之前，先來看一下這張完成圖片，相信有開發經驗的工程師們，一定都會得到UI/UX 設計師給的設計稿或切圖，以下這張圖應該算是張元件的完成圖：</p>
 <p><img src="layout1.png" alt=""></p>
 <p>當得到一張元件圖之後，就得要開始思考，怎麼樣做出這個元件，怎麼樣能夠真正呈現在手機上又能符合設計師要的動畫效果。</p>
