@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori.png">
-<meta property="og:updated_time" content="2018-08-31T04:44:19.833Z">
+<meta property="og:updated_time" content="2018-08-31T09:14:09.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (一)">
 <meta name="twitter:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
@@ -411,10 +411,8 @@
 <p>試著想像一下，如果你今天看一部電影，是高比寬的成像方式拍攝的，也就是用 9:16 的方式拍攝，我相信誰都無法接受這樣子的電影吧，感覺就真的非常奇怪。</p>
 <p>那麼來到智慧型手機爆炸的年代，人們被改變了使用習慣，手機拿著的方式是直立銀幕的，因為比較好握和處理事情，以至於大多數包括我的開發者一開始會困惑為什麼相機總是跟銀幕差90度，好麻煩啊！</p>
 <p>然後漸漸的，我們開始快速的操作相機來拍照或錄影，就並不會特別將手機橫著(90度 or 270度)拍攝，而是直立著拍攝，所以這個相差結果的原因就是如此。</p>
-<p>然後其實相機在手機上的角度，通常一開始就被定義為270度，是因為世界上右撇子的人佔大多數，而通常相機app在設計的時候，拍照或是錄製按鈕都會在Home鍵的地方，也就下銀幕0度的時候的正下方。</p>
 <p>這時候，如果你想要拍攝更多東西進來的時候，你會將手機橫著拿。</p>
-<p>那麼我們將手機以人類右撇子的習慣將手機正面對著自己然後底部朝向右方，是不是手機目前就是呈現在270度旋轉角度？ 就是因為這樣的設計關係，相機物理角度才會通常在硬體設計上被設計成270度，與銀幕相差90度角。</p>
-<p>其實當然也有相機物理角度出廠設置是在90度的，不過目前多支Android手機測試起來，都是270度，90度的還真沒有遇到過呢。</p>
+<p>這時候無論你是270度還是90度，你都會符合正常拍攝方式，也是因為這樣硬體上才”正常”的設計成跟螢幕成90度差。</p>
 <p>第二章開始，就要正式用程式碼來帶範例囉！</p>
 
       
