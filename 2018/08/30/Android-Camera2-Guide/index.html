@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori.png">
-<meta property="og:updated_time" content="2018-08-31T03:26:39.629Z">
+<meta property="og:updated_time" content="2018-08-31T04:44:19.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (一)">
 <meta name="twitter:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
@@ -364,17 +364,17 @@
 <img src="/2018/08/30/Android-Camera2-Guide/model.png" title="Model">
 <p>最大的架構原則，在我理解上，是使用了指令驅動和管線流模式。</p>
 <ol>
-<li><p>指令驅動我定義為：每個需使用的功能必須經過下達<strong>指令要求</strong>後才能啟用，如沒有下達某要求，每個功能依照自己預設定義的方式開啟。</p>
+<li><p>指令驅動我定義為：每個需使用的功能必須經過下達<span style="color:blue"><strong>指令要求</strong></span>後才能啟用，如沒有下達某要求，每個功能依照自己預設定義的方式開啟。</p>
 </li>
-<li><p>管線流模式我定義為：有一角色為<strong>中介控制者</strong>，從資料提供端提取資料或資料自行控制流入到一個<strong>輸入流</strong>，再將資料輸出到<strong>輸出流</strong>。</p>
+<li><p>管線流模式我定義為：有一角色為<span style="color:blue"><strong>中介控制者</strong></span>，從資料提供端提取資料或資料自行控制流入到一個<span style="color:blue"><strong>輸入流</strong></span>，再將資料輸出到<span style="color:blue"><strong>輸出流</strong></span>。</p>
 </li>
 </ol>
+<a id="more"></a>
 <p>指令驅動用個簡單的例子說明：我有一台電視，電視有一個功能叫做場景模式，比如足球模式、劇院模式、一般模式等等，可以改變電視的聲音等化效果、影像色彩之類的，但是我們一般不會去啟用這些模式，那麼電視就會以一般模式運行。</p>
 <p>當我使用遙控器輸入劇院模式之後，電視就會被我驅動，改變成劇院模式。</p>
 <p>管線流模式用個簡單的例子說明：我有一台筆記型電腦，開機之後，銀幕就會一直輸出影像。當我想要第二個輸出的時候(一般來說就是投影)，我用另外一個銀幕接上電腦，那麼影像就也會輸出到另外一個銀幕上。</p>
 <p>其實科技跟大眾的生活息息相關，很多我們在學習新技術的時候，身邊不乏一堆例子，都可以從中體會這些新技術的概念。</p>
-<a id="more"></a>
-<p>回到一開始我提到的最大架構原則，請注意我標註粗體的專有名詞，這些名詞會跟上方架構圖非常有關係。</p>
+<p>回到一開始我提到的最大架構原則，請注意我標註藍色的專有名詞，這些名詞會跟上方架構圖非常有關係。</p>
 <p>先說明一下圖中的虛線部分，虛線代表流程線；大型箭頭代表管線流，分別有輸入跟輸出。這裡可能比較難以理解的是虛線 Create 和 大箭頭 Input 的地方。</p>
 <p>兩個是擺在同一方向，但並不代表他們是一同運作的。什麼意思呢？ 因為Camera2 API 利用 CameraDevice 產生 Request 和 Session 兩大重要物件，所以我將他分在Session之上；而 Input 是因為 Session 開啟相機的資料是來自 CameraDevice，所以我也將他分在Session之上。</p>
 <p>CameraDevice產生兩大物件之後，在需求的時機點上，用Session去開啟相機輸入流讓資料輸入進來，換句話說，產生和輸入是分開的時機點，但一定要先產生才會有 Session可以開啟輸入流。</p>
@@ -449,6 +449,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/31/Android-Camera2-Guide-2/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -525,7 +529,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">文章</span>
                 </a>
               </div>

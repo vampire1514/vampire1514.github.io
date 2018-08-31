@@ -79,13 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
+<meta name="description" content="Android Camera2 API 錄影開發歷程 (二)date:2018-08-31 14:56:22 categories:Android第一步先拉個畫面出來吧，很簡單，一個 TextureView、一個 Button，完成以下： 123456789101112131415161718192021222324252627&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;u">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Lex&#39;s Vision">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/31/Android-Camera2-Guide-2/index.html">
 <meta property="og:site_name" content="Lex&#39;s Vision">
+<meta property="og:description" content="Android Camera2 API 錄影開發歷程 (二)date:2018-08-31 14:56:22 categories:Android第一步先拉個畫面出來吧，很簡單，一個 TextureView、一個 Button，完成以下： 123456789101112131415161718192021222324252627&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;u">
 <meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://yoursite.com/2018/08/31/Android-Camera2-Guide-2/layout_preview.png">
+<meta property="og:updated_time" content="2018-08-31T07:16:09.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lex&#39;s Vision">
+<meta name="twitter:description" content="Android Camera2 API 錄影開發歷程 (二)date:2018-08-31 14:56:22 categories:Android第一步先拉個畫面出來吧，很簡單，一個 TextureView、一個 Button，完成以下： 123456789101112131415161718192021222324252627&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;u">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/31/Android-Camera2-Guide-2/layout_preview.png">
 
 
 
@@ -115,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/31/Android-Camera2-Guide-2/"/>
 
 
 
 
 
-  <title>Lex's Vision</title>
+  <title> | Lex's Vision</title>
   
 
 
@@ -140,8 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -224,9 +229,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -256,9 +261,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/31/Android-Camera2-Guide-2/" itemprop="url">未命名</a></h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -290,6 +293,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
 
           
 
@@ -308,8 +316,7 @@
       
 
       
-        
-          <hr>
+        <hr>
 <p>Android Camera2 API 錄影開發歷程 (二)<br>date:2018-08-31 14:56:22</p>
 <h2 id="categories-Android"><a href="#categories-Android" class="headerlink" title="categories:Android"></a>categories:Android</h2><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>先拉個畫面出來吧，很簡單，一個 TextureView、一個 Button，完成以下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;android.support.constraint.ConstraintLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:app=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">    tools:context=<span class="string">".MainActivity"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextureView</span><br><span class="line">        android:id=<span class="string">"@+id/surface"</span></span><br><span class="line">        android:layout_width=<span class="string">"wrap_content"</span></span><br><span class="line">        android:layout_height=<span class="string">"wrap_content"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Button</span><br><span class="line">        android:id=<span class="string">"@+id/btnRecord"</span></span><br><span class="line">        android:layout_width=<span class="string">"0dp"</span></span><br><span class="line">        android:layout_height=<span class="string">"45dp"</span></span><br><span class="line">        android:layout_marginBottom=<span class="string">"15dp"</span></span><br><span class="line">        android:layout_marginEnd=<span class="string">"18dp"</span></span><br><span class="line">        android:layout_marginStart=<span class="string">"18dp"</span></span><br><span class="line">        android:text=<span class="string">"錄影"</span></span><br><span class="line">        android:textSize=<span class="string">"16sp"</span></span><br><span class="line">        app:layout_constraintBottom_toBottomOf=<span class="string">"parent"</span></span><br><span class="line">        app:layout_constraintLeft_toLeftOf=<span class="string">"parent"</span></span><br><span class="line">        app:layout_constraintRight_toRightOf=<span class="string">"parent"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
@@ -317,14 +324,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 取消系統預設的 tool bar --&gt;</span><br><span class="line">&lt;item name=&quot;windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">&lt;item name=&quot;windowActionBar&quot;&gt;false&lt;/item&gt;</span><br></pre></td></tr></table></figure>
 <p>因為我們要用全螢幕來顯示相機預覽，所以任何toolbar通通要消失不見，連v7 toolbar我們也沒有建立。完成後應該在preview的版面會看到像這樣：</p>
 <img src="/2018/08/31/Android-Camera2-Guide-2/layout_preview.png" title="Layout">
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/31/Android-Camera2-Guide-2/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<a id="more"></a>
+
       
     </div>
     
@@ -341,187 +342,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/Android-Camera2-Guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lex">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lex's Vision">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/30/Android-Camera2-Guide/" itemprop="url">Android Camera2 API 錄影開發歷程 (一)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-08-30T16:04:07+08:00">
-                2018-08-30
-              </time>
+              <a href="/2018/08/30/Android-Camera2-Guide/" rel="next" title="Android Camera2 API 錄影開發歷程 (一)">
+                <i class="fa fa-chevron-left"></i> Android Camera2 API 錄影開發歷程 (一)
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h2 id="Android-Studio-環境配置"><a href="#Android-Studio-環境配置" class="headerlink" title="Android Studio 環境配置"></a>Android Studio 環境配置</h2><ul>
-<li>Android 6.0</li>
-<li>minSdkVersion 21</li>
-<li>targetSdkVersion 27</li>
-<li>Language：Kotlin</li>
-<li>第三方使用套件：RxJava2</li>
-</ul>
-<h2 id="程度需求"><a href="#程度需求" class="headerlink" title="程度需求"></a>程度需求</h2><ul>
-<li>對 kotlin 有一定程度了解</li>
-<li>對 多執行緒 與 執行緒安全 有基礎概念</li>
-<li>對 物件導向的繼承、抽象、封裝有基本觀念</li>
-<li>熟悉 RxJava2</li>
-<li>難易度：★★★☆☆</li>
-</ul>
-<p>之所以列出程度需求，並不是排擠新手或是不願意講解所運用到的觀念和關鍵技術，而是如果每個地方都必須講解的很徹底的話，那可能會偏離Camera2 開發過程的重點解說，先跟觀看此文的大家說聲抱歉抱歉！</p>
-<p>因此有些基本觀念如你看不太懂，可以對該概念或技術先自我研習一下，養成好習慣，會對學習越來越有幫助的！</p>
-<p>有些基本的程式觀念，日後我也會另開文章來說明，因為是開發歷程，有些Camera2的其他設定我也並沒有特別的深入研究，<strong>如你任何文章中看到錯誤，都可以提出指正哦！</strong></p>
-<p>目前可以達到的功能是：開啟相機前鏡頭後預覽 &gt; 錄影成影片</p>
-<h2 id="前導：介紹與架構圖"><a href="#前導：介紹與架構圖" class="headerlink" title="前導：介紹與架構圖"></a>前導：介紹與架構圖</h2><p>難度標上三顆星，其實是因為當中我用了比較多的 Rx 操作以及 Camera2 Api 相較於 Camera Api對開發者真的是比較複雜了點，簡單的說，Camera2 Api 使用上沒有那麼直覺。</p>
-<p>而且，Google 官方對 Camera2 的解說真的頗少，對於一開始就增加了像我這種英文不好的人來理解整個API結構的難度，所以我只好從官方的文章：</p>
-<p><a href="https://developer.android.com/reference/android/hardware/camera2/package-summary?utm_campaign=adp_series_how_to_camera2_031016&amp;utm_source=medium&amp;utm_medium=blog" target="_blank" rel="noopener">Camer2 Link</a></p>
-<p>搭配 Source Code ： <a href="https://github.com/googlesamples/android-Camera2Basic" target="_blank" rel="noopener">Camera2Basic</a> , <a href="https://github.com/googlesamples/android-Camera2Video" target="_blank" rel="noopener">Camera2Video</a> 兩個範例去理解。</p>
-<img src="/2018/08/30/Android-Camera2-Guide/model.png" title="Model">
-<p>最大的架構原則，在我理解上，是使用了指令驅動和管線流模式。</p>
-<ol>
-<li><p>指令驅動我定義為：每個需使用的功能必須經過下達<span style="color:blue"><strong>指令要求</strong></span>後才能啟用，如沒有下達某要求，每個功能依照自己預設定義的方式開啟。</p>
-</li>
-<li><p>管線流模式我定義為：有一角色為<span style="color:blue"><strong>中介控制者</strong></span>，從資料提供端提取資料或資料自行控制流入到一個<span style="color:blue"><strong>輸入流</strong></span>，再將資料輸出到<span style="color:blue"><strong>輸出流</strong></span>。</p>
-</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/30/Android-Camera2-Guide/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -531,168 +373,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/16/UIVolumeView/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lex">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lex's Vision">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/16/UIVolumeView/" itemprop="url">客製化音量偵測UI！ UIVolumeView 全實作紀錄</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-08-16T12:51:59+08:00">
-                2018-08-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Android-Studio-環境配置"><a href="#Android-Studio-環境配置" class="headerlink" title="Android Studio 環境配置"></a>Android Studio 環境配置</h2><ul>
-<li>Android 6.0</li>
-<li>minSdkVersion 21</li>
-<li>targetSdkVersion 27</li>
-<li>Language：Kotlin</li>
-<li>第三方使用套件：無</li>
-</ul>
-<h2 id="程度需求"><a href="#程度需求" class="headerlink" title="程度需求"></a>程度需求</h2><ul>
-<li>對 kotlin 有一定程度了解</li>
-<li>對 Android 客製化 UI 有基礎認識</li>
-</ul>
-<h2 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h2><p>廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！</p>
-<img src="/2018/08/16/UIVolumeView/sample.gif" title="Sample">
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/16/UIVolumeView/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -700,6 +385,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -720,8 +409,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -794,6 +492,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#categories-Android"><span class="nav-number">1.</span> <span class="nav-text">categories:Android</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步"><span class="nav-number">2.</span> <span class="nav-text">第一步</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -954,6 +668,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
