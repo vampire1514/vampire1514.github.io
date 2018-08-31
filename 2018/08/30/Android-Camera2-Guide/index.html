@@ -79,13 +79,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lex&#39;s Vision">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Camera2 API 錄影開發歷程 (一)">
+<meta property="og:url" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/index.html">
 <meta property="og:site_name" content="Lex&#39;s Vision">
+<meta property="og:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
 <meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori.png">
+<meta property="og:updated_time" content="2018-08-31T03:26:39.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lex&#39;s Vision">
+<meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (一)">
+<meta name="twitter:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
 
 
 
@@ -115,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/30/Android-Camera2-Guide/"/>
 
 
 
 
 
-  <title>Lex's Vision</title>
+  <title>Android Camera2 API 錄影開發歷程 (一) | Lex's Vision</title>
   
 
 
@@ -140,8 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -224,9 +230,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -256,9 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/30/Android-Camera2-Guide/" itemprop="url">Android Camera2 API 錄影開發歷程 (一)</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android Camera2 API 錄影開發歷程 (一)</h1>
         
 
         <div class="post-meta">
@@ -312,6 +316,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
 
           
 
@@ -330,8 +339,7 @@
       
 
       
-        
-          <h2 id="Android-Studio-環境配置"><a href="#Android-Studio-環境配置" class="headerlink" title="Android Studio 環境配置"></a>Android Studio 環境配置</h2><ul>
+        <h2 id="Android-Studio-環境配置"><a href="#Android-Studio-環境配置" class="headerlink" title="Android Studio 環境配置"></a>Android Studio 環境配置</h2><ul>
 <li>Android 6.0</li>
 <li>minSdkVersion 21</li>
 <li>targetSdkVersion 27</li>
@@ -365,14 +373,50 @@
 <p>當我使用遙控器輸入劇院模式之後，電視就會被我驅動，改變成劇院模式。</p>
 <p>管線流模式用個簡單的例子說明：我有一台筆記型電腦，開機之後，銀幕就會一直輸出影像。當我想要第二個輸出的時候(一般來說就是投影)，我用另外一個銀幕接上電腦，那麼影像就也會輸出到另外一個銀幕上。</p>
 <p>其實科技跟大眾的生活息息相關，很多我們在學習新技術的時候，身邊不乏一堆例子，都可以從中體會這些新技術的概念。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/30/Android-Camera2-Guide/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<a id="more"></a>
+<p>回到一開始我提到的最大架構原則，請注意我標註粗體的專有名詞，這些名詞會跟上方架構圖非常有關係。</p>
+<p>先說明一下圖中的虛線部分，虛線代表流程線；大型箭頭代表管線流，分別有輸入跟輸出。這裡可能比較難以理解的是虛線 Create 和 大箭頭 Input 的地方。</p>
+<p>兩個是擺在同一方向，但並不代表他們是一同運作的。什麼意思呢？ 因為Camera2 API 利用 CameraDevice 產生 Request 和 Session 兩大重要物件，所以我將他分在Session之上；而 Input 是因為 Session 開啟相機的資料是來自 CameraDevice，所以我也將他分在Session之上。</p>
+<p>CameraDevice產生兩大物件之後，在需求的時機點上，用Session去開啟相機輸入流讓資料輸入進來，換句話說，產生和輸入是分開的時機點，但一定要先產生才會有 Session可以開啟輸入流。</p>
+<p>再來就是整體運作流程了，CameraManager 管理手機的相機，但不進行拍照、錄影、輸入輸出控制之類的實際硬體功能，我將 CameraManager 定義叫做入口點，他管理相機硬體上的資訊、硬體上的特徵描述以及<strong>打開相機</strong>。</p>
+<p>也因此 CameraManager 提供了一系列的 CameraCameraCharacteristics(相機特徵檔)供開發者取用，例如：相機預覽的大小、相機可支援錄製的大小、是否支援曝光模式、是否支援閃光模式，很多特徵描述，都可以到官方API文件上查閱。</p>
+<p>接著看一下以下的流程描述：</p>
+<ol>
+<li>CameraManager 取得 CameraCameraCharacteristics，利用這些特徵描述先得知相關訊息，比如我想要先知道相機可以預覽的大小有多少，然後選出最適合的大小輸出到手機銀幕上的 Size</li>
+<li>用 CameraManager openCamera，開啟成功之後，會得到 CameraDevice</li>
+<li>用 CameraDevice 產生 CameraRequest , CameraCaptureSession</li>
+<li>用 CameraCaptureSession 搭配指令要求，請求相機開始輸入資料並將資料輸出到對應輸出上</li>
+</ol>
+<p>以上四點流程，其中還有很多細節，之後會一一說明。</p>
+<p>其中 CameraCaptureSession 所代表的就是中介者，輸入流來自相機，輸出流有很多，可能是 SurfaceView,TextureView,MediaRecorder,ImageReader etc.</p>
+<p>其中 CameraRequest 所代表的就是指令驅動，這裡你可以下達我要開啟3A自動模式還是手動控制模式，我要讓相機集中放大哪一區塊顯示，或是讓拍照的結果解析度控制在哪個解析度上。</p>
+<p>當然，Camera1 API 就讓人熟知的就是相機成像的旋轉方向和銀幕方向是彼此相差90度的這個問題，想當然Camera2 應該也會知道這個問題，但是Camera2 不再讓開發者直接進行物理性旋轉。</p>
+<p>簡單的說就是，setDisplayOrientation 在 Camera2 上沒有相等的設置了。</p>
+<p>那怎麼辦，其實我研究了一兩個禮拜，得到的結果是：當 Session 渲染資料到Surface上的時候，如果你的銀幕比例剛好等於(也可以不用差太多)你的預覽和錄影結果比例就並不會因為你手持手機旋轉到各個角度之後產生拉伸的問題。</p>
+<p>不過以上測驗，在Android 5 的手機，沒有用！ 如果你真的很想要相容 Android 5 ，用 Camera 和 Camera2混合使用，才能真正的治本。</p>
+<h3 id="旋轉角度"><a href="#旋轉角度" class="headerlink" title="旋轉角度"></a>旋轉角度</h3><p>在動手實作之前，我們一樣要先來探討一下，相機物理角度和銀幕角度是什麼樣的關係。</p>
+<p>兩個名詞在英文上定義：</p>
+<ol>
+<li>相機物理角度 = Sensor Orientation</li>
+<li>銀幕角度 = Screen Orientation</li>
+</ol>
+<p>首先，先定義旋轉方向是順時針，從0開始到360度：</p>
+<img src="/2018/08/30/Android-Camera2-Guide/ori.png" title="Model">
+<p>圖中小黑圓點就是代表0點像素成像的方式，通過圖例就可以發現，相機角度跟銀幕角度總是相差90度，這是因為目前市面上幾乎所有手機都將相機硬體位置和銀幕位置設計成90度相差。</p>
+<p>不過這個相差90度，不論是否相機在硬體上被固定的角度在90度角或是270度角，都是成立的，所以在Camera1 的時代，我們都會直接設定 setDisplayOrientation(90)的原因就在這裡。</p>
+<p>因為相機成像的結果必然會和銀幕差了那90度角，你可以將左右兩圖重疊來看就會明白為什麼了。</p>
+<h3 id="題外話"><a href="#題外話" class="headerlink" title="題外話"></a>題外話</h3><p>接著來講個額外的說明好了，為什麼相機角度總是跟銀幕角度差了90度？ 據我開始研究相機歷經Camera1 到 Camera2的，到了最近我去翻了一些有關影片拍攝、相機相關的文章來研究的時候才理解，其實這跟人在觀看影片和照片的習慣有關。</p>
+<p>在沒有智慧型手機的年代，大概是八九年前吧，相機拍攝照片，DV拍攝影片，有沒有發現成像出來的結果都依循著一定的寬高比，像是 4:3 , 16:9，也就是寬比高大的成像結果。</p>
+<p>我們都暸解 4:3,16:9 成像，像是電影、電視銀幕、專業的相機都會以寬比高大的方式被製作，之所以這些從以前一直到現在都沒改變的成像結果，就是因為寬比高大的成像能夠拍攝到的環境和表現的結果都能讓人觀看時比較舒服，而且來的有質感。</p>
+<p>試著想像一下，如果你今天看一部電影，是高比寬的成像方式拍攝的，也就是用 9:16 的方式拍攝，我相信誰都無法接受這樣子的電影吧，感覺就真的非常奇怪。</p>
+<p>那麼來到智慧型手機爆炸的年代，人們被改變了使用習慣，手機拿著的方式是直立銀幕的，因為比較好握和處理事情，以至於大多數包括我的開發者一開始會困惑為什麼相機總是跟銀幕差90度，好麻煩啊！</p>
+<p>然後漸漸的，我們開始快速的操作相機來拍照或錄影，就並不會特別將手機橫著(90度 or 270度)拍攝，而是直立著拍攝，所以這個相差結果的原因就是如此。</p>
+<p>然後其實相機在手機上的角度，通常一開始就被定義為270度，是因為世界上右撇子的人佔大多數，而通常相機app在設計的時候，拍照或是錄製按鈕都會在Home鍵的地方，也就下銀幕0度的時候的正下方。</p>
+<p>這時候，如果你想要拍攝更多東西進來的時候，你會將手機橫著拿。</p>
+<p>那麼我們將手機以人類右撇子的習慣將手機正面對著自己然後底部朝向右方，是不是手機目前就是呈現在270度旋轉角度？ 就是因為這樣的設計關係，相機物理角度才會通常在硬體設計上被設計成270度，與銀幕相差90度角。</p>
+<p>其實當然也有相機物理角度出廠設置是在90度的，不過目前多支Android手機測試起來，都是270度，90度的還真沒有遇到過呢。</p>
+<p>第二章開始，就要正式用程式碼來帶範例囉！</p>
+
       
     </div>
     
@@ -389,170 +433,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/16/UIVolumeView/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lex">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lex's Vision">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/16/UIVolumeView/" itemprop="url">客製化音量偵測UI！ UIVolumeView 全實作紀錄</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-08-16T12:51:59+08:00">
-                2018-08-16
-              </time>
+              <a href="/2018/08/16/UIVolumeView/" rel="next" title="客製化音量偵測UI！ UIVolumeView 全實作紀錄">
+                <i class="fa fa-chevron-left"></i> 客製化音量偵測UI！ UIVolumeView 全實作紀錄
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分類於</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h2 id="Android-Studio-環境配置"><a href="#Android-Studio-環境配置" class="headerlink" title="Android Studio 環境配置"></a>Android Studio 環境配置</h2><ul>
-<li>Android 6.0</li>
-<li>minSdkVersion 21</li>
-<li>targetSdkVersion 27</li>
-<li>Language：Kotlin</li>
-<li>第三方使用套件：無</li>
-</ul>
-<h2 id="程度需求"><a href="#程度需求" class="headerlink" title="程度需求"></a>程度需求</h2><ul>
-<li>對 kotlin 有一定程度了解</li>
-<li>對 Android 客製化 UI 有基礎認識</li>
-</ul>
-<h2 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h2><p>廢話不多說，先看個效果，來了解一下我們會做出什麼東西來！</p>
-<img src="/2018/08/16/UIVolumeView/sample.gif" title="Sample">
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/16/UIVolumeView/#more" rel="contents">
-              閱讀全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -562,10 +464,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -573,6 +476,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -593,8 +500,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -667,6 +583,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Studio-環境配置"><span class="nav-number">1.</span> <span class="nav-text">Android Studio 環境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程度需求"><span class="nav-number">2.</span> <span class="nav-text">程度需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前導：介紹與架構圖"><span class="nav-number">3.</span> <span class="nav-text">前導：介紹與架構圖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#旋轉角度"><span class="nav-number">3.1.</span> <span class="nav-text">旋轉角度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#題外話"><span class="nav-number">3.2.</span> <span class="nav-text">題外話</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -827,6 +759,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
