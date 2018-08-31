@@ -88,7 +88,8 @@
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori.png">
-<meta property="og:updated_time" content="2018-08-31T09:23:17.536Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori2.png">
+<meta property="og:updated_time" content="2018-08-31T09:31:56.864Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (一)">
 <meta name="twitter:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
@@ -416,8 +417,9 @@
 <p>而正常上，相機的成像角度其實前後鏡頭會不一樣，有的手機後鏡頭是90前鏡頭是270，而有的手機卻是後鏡頭270前鏡頭90。</p>
 <p>但是無論如何，不管是90或是270，都是寬比高長的比例尺，只是我們開發者要特別注意一件事情：</p>
 <p>相機物理角度會影響拍攝結果，錄影或拍照都是！我們會預期直著拍，但是為什麼影片卻是直著拍沒錯，但是整個畫面被翻轉成90 or 270?</p>
-<p>所以這時候，我們就要根據相機物理角度搭配螢幕旋轉角度，計算之後再輸出成：我們是怎麼拿著拍，就該怎麼呈現的方向！</p>
-<p>詳細計算之後在錄影的地方就會提到！</p>
+<p>所以這時候，我們就要根據相機物理角度搭配螢幕旋轉角度，計算之後再輸出成：我們是怎麼拿著拍，就該怎麼呈現的方向！就像是以下這種讓我們疑惑的結果：</p>
+<img src="/2018/08/30/Android-Camera2-Guide/ori2.png" title="Result">
+<p>那要怎麼做以及詳細計算之後在錄影的地方就會提到！</p>
 <p>第二章開始，就要正式用程式碼來帶範例囉！</p>
 
       
