@@ -335,7 +335,13 @@
             <h2 id="重點整理"><a href="#重點整理" class="headerlink" title="重點整理"></a>重點整理</h2><ul>
 <li>打開相機，完成 full screen 預覽</li>
 </ul>
-<h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2>
+<h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>最先開始，我們要先對整個螢幕設置全畫面顯示，並隱藏status bar 和 navgation(有的手機是用虛擬導航按鍵，那就直接隱藏)</p>
+<p>navgation 用在實體的導航按鍵當然是不起作用的，不過多設這個flag對實體沒影響，主要是通吃所有手機全螢幕顯示</p>
+<p>在 onResume 下多加這行：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">window.decorView.systemUiVisibility =</span><br><span class="line">                View.SYSTEM_UI_FLAG_FULLSCREEN or</span><br><span class="line">                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or</span><br><span class="line">                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or</span><br><span class="line">                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span><br></pre></td></tr></table></figure>
+<p>接著我們要先做一件重要的事情，資源有開就有關，所以要在生命週期的部分去控制這個行為，記得之前已經有在 onResume 的地方打開了相機吧！ 這時侯要在 onPause 的時候關閉，無論有無授權都關閉！</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onPause</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onPause()</span><br><span class="line"></span><br><span class="line">    cameraCore.close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
           
         
       
