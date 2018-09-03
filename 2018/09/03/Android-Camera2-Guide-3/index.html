@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Lex&#39;s Vision">
 <meta property="og:description" content="重點整理 打開相機，完成 full screen 預覽  第一步最先開始，我們要先對整個螢幕設置全畫面顯示，並隱藏status bar 和 navgation(有的手機是用虛擬導航按鍵，那就直接隱藏) navgation 用在實體的導航按鍵當然是不起作用的，不過多設這個flag對實體沒影響，主要是通吃所有手機全螢幕顯示 在 onResume 下多加這行： 12345window.decorView">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-09-03T03:02:57.962Z">
+<meta property="og:updated_time" content="2018-09-03T08:46:19.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (三)">
 <meta name="twitter:description" content="重點整理 打開相機，完成 full screen 預覽  第一步最先開始，我們要先對整個螢幕設置全畫面顯示，並隱藏status bar 和 navgation(有的手機是用虛擬導航按鍵，那就直接隱藏) navgation 用在實體的導航按鍵當然是不起作用的，不過多設這個flag對實體沒影響，主要是通吃所有手機全螢幕顯示 在 onResume 下多加這行： 12345window.decorView">
@@ -345,6 +345,95 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">window.decorView.systemUiVisibility =</span><br><span class="line">                View.SYSTEM_UI_FLAG_FULLSCREEN or</span><br><span class="line">                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or</span><br><span class="line">                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or</span><br><span class="line">                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span><br></pre></td></tr></table></figure>
 <p>接著我們要先做一件重要的事情，資源有開就有關，所以要在生命週期的部分去控制這個行為，記得之前已經有在 onResume 的地方打開了相機吧！ 這時侯要在 onPause 的時候關閉，無論有無授權都關閉！</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onPause</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onPause()</span><br><span class="line"></span><br><span class="line">    cameraCore.close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>close 都還沒有任何程式碼實作，之後再做就可以了</p>
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>開始準備預覽畫面，首先要先在Activity中宣告出兩個變數，一個是 textureView 用 findViewById 存取，一個是 surfaceListener，textureView的各種狀態call back，使用匿名類別直接實作。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> textureView: TextureView</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> surfaceListener = <span class="keyword">object</span> : TextureView.SurfaceTextureListener &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSurfaceTextureSizeChanged</span><span class="params">(p0: <span class="type">SurfaceTexture</span>?, p1: <span class="type">Int</span>, p2: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSurfaceTextureUpdated</span><span class="params">(p0: <span class="type">SurfaceTexture</span>?)</span></span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSurfaceTextureDestroyed</span><span class="params">(p0: <span class="type">SurfaceTexture</span>?)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onSurfaceTextureAvailable</span><span class="params">(surface: <span class="type">SurfaceTexture</span>?, width: <span class="type">Int</span>, height: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">        preview()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然後在onSurfaceTextureAvailable呼叫 preview() 的 private 方法，稍後會實作。</p>
+<ul>
+<li>在onCreate 加上：</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">textureView = findViewById(R.id.surface)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>onResume 原本直接openCamera的呼叫，改寫為：</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (ContextCompat.checkSelfPermission(<span class="keyword">this</span>, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line">    <span class="comment">//有授權就打開</span></span><br><span class="line">    preview()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之後統一打開相機接著打開預覽的步驟，都在prview直接動作。</p>
+<ul>
+<li>preview()</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">preview</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (textureView.isAvailable) &#123;</span><br><span class="line">        cameraCore.openCamera().flatMap &#123;</span><br><span class="line">            <span class="keyword">if</span> (!it) &#123;</span><br><span class="line">                <span class="keyword">return</span><span class="symbol">@flatMap</span> Observable.just(<span class="literal">false</span>)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            textureView.surfaceTexture.setDefaultBufferSize(cameraCore.previewSize.width,cameraCore.previewSize.height)</span><br><span class="line">            <span class="keyword">return</span><span class="symbol">@flatMap</span> cameraCore.startPreview(arrayListOf(Surface(textureView.surfaceTexture)))</span><br><span class="line">        &#125;.subscribe &#123;</span><br><span class="line"></span><br><span class="line">            Log.d(<span class="string">"preview"</span>, <span class="string">" Preview :<span class="variable">$it</span>"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        textureView.surfaceTextureListener = surfaceListener</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><span style="color:red"><em>另外要特別注意的是，如果這台手機支援的最大preview size之長或寬小於 screen 的時候，即時用 1080x1920 對 Texture BufferSize設定，比例跟720x1280一樣的情況之下，還是一樣會造成圖像拉伸問題，所以在挑選合適的大小的時候，盡量preview長寬小於Screen，並符合 Screen ratio</em></span></li>
+</ul>
+<p>程式碼解說：<br>onSurfaceTextureAvailable , onResume 中都直接呼叫了 preview()，onSurfaceTextureAvailable 照字面上顯示就是 TextureView 可使用的時候，開啟camera preview的時候，也是必須要在 Texture 可用之後，才比較不會有問題。</p>
+<p>而第一行 textureView.isAvailable 的判斷，簡單做兩件事情：</p>
+<ol>
+<li>可用的時候，直接preview</li>
+<li>不可用的時候，先用 listener 去監聽，得到 callback之後在 preivew</li>
+</ol>
+<p>所以在onSurfaceTextureAvailable call back時，preview()呼叫後就會進入 textureView.isAvailable == true 的判斷，然後開啟相機並預覽。</p>
+<p>這邊我直接使用了 flatMap，串連兩個 Observable ，在 flatMap 區塊中，如果接到 false 代表開啟失敗，那麼就直接回傳了 Observable.just(false)，後面也都不用持續在做。</p>
+<p>operator of flatMap 在 Rx 的用意，是一種Observale的轉換方式，其轉換結果也要符合是 Observale<t> 的 class，而 operator of map 在 Rx 的意思則是轉換資料，並不用轉換成整個 Observale<t>。</t></t></p>
+<p>這個方式用在一步串一步的流程中，滿好使用與理解的！</p>
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><h3 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h3><p>如果Activity的程式碼實作都沒問題之後，就切回 CameraCore 寫有關預覽的部分程式碼。這次我們直接把重點擺在startPreview。</p>
+<p>這裏先說明，我獨立CameraCore出來的意義：</p>
+<ul>
+<li>封裝 Camera2 使用</li>
+<li>跟 Activity 程式碼分開</li>
+<li>跟 View 的邏輯分開</li>
+</ul>
+<p>這樣做的好處很多，最大的益處就是邏輯切割和重複使用，比較不會因為需要改view而整個Activity大改程式碼與架構。</p>
+<h3 id="CameraCore"><a href="#CameraCore" class="headerlink" title="CameraCore"></a>CameraCore</h3><ul>
+<li>thread lock</li>
+</ul>
+<p>請先在class 內宣告一個執行緒鎖，這裏運用了 Semaphore。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> lock = Semaphore(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>Semaphore 建構子的 permits 填入1，代表一次執行一次就上鎖，其他 thread 等釋放。</p>
+<ul>
+<li>startPreview(surface: List<surface>)</surface></li>
+</ul>
+<p>先把原本的回傳值改為 create ，就跟 openCamera 一樣：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">startPreview</span><span class="params">(surface: <span class="type">List</span>&lt;<span class="type">Surface</span>&gt;)</span></span>: Observable&lt;<span class="built_in">Boolean</span>&gt; &#123;</span><br><span class="line">	<span class="keyword">return</span> Observable.create &#123;</span><br><span class="line">	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>開始寫主要的核心程式碼的時候，要先稍微提一下 Semaphore 用在這 class 中的意義：</p>
+<p>Semaphore的使用是 acquire + release，具體運作流程不多說。主要在CameraCore中的作用是上鎖 preview 和 close 兩方法之間不要互搶資源。</p>
+<p>是一種保證一定會依照以下流程的運作的手法：</p>
+<ol>
+<li>preview -&gt; close</li>
+<li>close -&gt; preivew</li>
+</ol>
+<p>當你在背景執行緒開啟預覽、關閉相機的時候尤其更為明顯；甚至如果更安全，連 openCamera 都可以加上去，保證流程順暢。</p>
+<p>所以一開始在 create 區塊中第一行要寫的就是上鎖：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> Observable.create &#123;</span><br><span class="line">	<span class="keyword">if</span> (!lock.tryAcquire(<span class="number">2500</span>, TimeUnit.MILLISECONDS)) &#123;</span><br><span class="line">	    it.onNext(<span class="literal">false</span>)</span><br><span class="line">	    it.onComplete()</span><br><span class="line">	    <span class="keyword">return</span><span class="symbol">@create</span></span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>tryAcquire 跟 acquire 不一樣的地方在，tryAcquire 是有試著獲取的意味，我試著獲取一段時間之內，如果沒有拿到鑰匙就會回傳 false，這時候我們就要做相對應的處理。</p>
+<h2 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h2><p>接著最後的流程就是建立兩個主要物件：CaptureRequest、CameraCaptureSession，它們的建立方式要使用 CameraDevice 來建立，就用我們開啟相機時得到的相機實例來建立吧！</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> Observable.create &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!lock.tryAcquire(<span class="number">2500</span>, TimeUnit.MILLISECONDS)) &#123;</span><br><span class="line">        it.onNext(<span class="literal">false</span>)</span><br><span class="line">        it.onComplete()</span><br><span class="line">        <span class="keyword">return</span><span class="symbol">@create</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cameraDevice == <span class="literal">null</span> || surface.isEmpty()) &#123;</span><br><span class="line">        it.onNext(<span class="literal">false</span>)</span><br><span class="line">        it.onComplete()</span><br><span class="line">        lock.release()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        requestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//必要步驟，target 至少一定一個</span></span><br><span class="line">        requestBuilder?.addTarget(surface[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        cameraDevice?.createCaptureSession(surface, <span class="keyword">object</span> : CameraCaptureSession.StateCallback() &#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onConfigureFailed</span><span class="params">(session: <span class="type">CameraCaptureSession</span>?)</span></span> &#123;</span><br><span class="line">                lock.release()</span><br><span class="line"></span><br><span class="line">                it.onNext(<span class="literal">false</span>)</span><br><span class="line">                it.onComplete()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onConfigured</span><span class="params">(session: <span class="type">CameraCaptureSession</span>?)</span></span> &#123;</span><br><span class="line">                <span class="keyword">this</span><span class="symbol">@CameraCore</span>.captureSession = session</span><br><span class="line">                lock.release()</span><br><span class="line"></span><br><span class="line">                previewNow()</span><br><span class="line"></span><br><span class="line">                it.onNext(<span class="literal">true</span>)</span><br><span class="line">                it.onComplete()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;, <span class="literal">null</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>1.一開始先判斷 device 是不是 null ? or 有沒有 surface?</p>
+<p>2.createCaptureRequest，這裡要傳入告知TEMPLATE 型態</p>
+<blockquote>
+<p>TEMPLATE 有分 PREVIEW , RECORD etc，很多，我也沒看完就不多做解釋。</p>
+<p>建立出Builder後，把他指定給先前我們寫好的全域變數</p>
+</blockquote>
+<p>3.對這個Buidler addTarget，至少要有一個，而且一定要是整個陣列中的其中之一，這是官方文件上寫的，實際測試的時候，如果沒有增加任何一個 target ，確實會出錯</p>
+<p>4.最後 createCaptureSession，把要 output 的資源指定上去，並且監聽 callback</p>
+<blockquote>
+<p>onConfigureFailed，onNext(失敗)，並且釋放鎖</p>
+<p>onConfigured，將 session 保存起來，然後釋放鎖、onNext(成功)</p>
+<p>進行 previewNow()，要使用 session開始preview，一定要在onConfigured成功後執行。</p>
+<p>兩個call back 記得最後都要 it.onComplete</p>
+</blockquote>
+</blockquote>
+<h3 id="previewNow"><a href="#previewNow" class="headerlink" title="previewNow()"></a>previewNow()</h3><p>當完成上面的程式碼之後，previewNow 還沒做所以一定是有錯誤，接著把它完全：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//啟動 session 預覽</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">previewNow</span><span class="params">()</span></span> &#123;</span><br><span class="line">    requestBuilder?.<span class="keyword">set</span>(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)</span><br><span class="line">    captureSession?.setRepeatingRequest(requestBuilder?.build(), <span class="literal">null</span>, <span class="literal">null</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>1.先設定 Request 的指令，這裡我設定了 MODE_AUTO，也就是 3A 自動模式</p>
+<p>2.setRepeatingRequest，帶入三個參數，Request 實例、callback介面、Handler loop</p>
+<blockquote>
+<p>Request 實例來自Builder.build()。這是一種 build 的架構設計模式，可自行google參考</p>
+<p>callback介面，這裡不傳入<br>Handler loop，給 null 用 main loop執行</p>
+</blockquote>
+</blockquote>
+<p>執行 APP，看看畫面有沒有出現吧！</p>
 
       
     </div>
@@ -522,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重點整理"><span class="nav-number">1.</span> <span class="nav-text">重點整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步"><span class="nav-number">2.</span> <span class="nav-text">第一步</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重點整理"><span class="nav-number">1.</span> <span class="nav-text">重點整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步"><span class="nav-number">2.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步"><span class="nav-number">3.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三步"><span class="nav-number">4.</span> <span class="nav-text">第三步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity"><span class="nav-number">4.1.</span> <span class="nav-text">Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CameraCore"><span class="nav-number">4.2.</span> <span class="nav-text">CameraCore</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四步"><span class="nav-number">5.</span> <span class="nav-text">第四步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#previewNow"><span class="nav-number">5.1.</span> <span class="nav-text">previewNow()</span></a></li></ol></li></ol></div>
             
 
           </div>

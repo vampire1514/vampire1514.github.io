@@ -87,7 +87,7 @@
 <meta property="og:description" content="重點整理 實作 CameraCore class 完成 video size , preview size , sensor orientaion 的讀取 成功打開相機  第一步New一個新專案出來，在activity_main.xml上先拉個畫面出來吧！很簡單，我們就一個 TextureView、一個 Button就行，完成以下： 12345678910111213141516171819202">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/08/31/Android-Camera2-Guide-2/layout_preview.png">
-<meta property="og:updated_time" content="2018-09-03T03:40:32.196Z">
+<meta property="og:updated_time" content="2018-09-03T07:58:46.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (二)">
 <meta name="twitter:description" content="重點整理 實作 CameraCore class 完成 video size , preview size , sensor orientaion 的讀取 成功打開相機  第一步New一個新專案出來，在activity_main.xml上先拉個畫面出來吧！很簡單，我們就一個 TextureView、一個 Button就行，完成以下： 12345678910111213141516171819202">
@@ -364,14 +364,13 @@
 <p>大致上到這裡 build 應該都沒什麼問題，進入下一步驟。</p>
 <h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>這一階段，我們要開始封裝 Camera2的一切東西，為了讓其他物件使用順暢，根據需求建構一些簡單易用的funtion直接在我們的app取用，說明白一點就是把Camera2再封裝成一層變成更高一級的API，讓我們自己使用。</p>
 <p>新建一個 kt class，命名為： CameraCore，然後先加入以下三個method：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//純預覽，什麼動作都不做</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">startPreview</span><span class="params">(surface: <span class="type">Surface</span>)</span></span>: Observable&lt;<span class="built_in">Boolean</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.just(<span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//打開預覽，並提供錄影輸出流</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">startPreviewForRecording</span><span class="params">(savePath: <span class="type">String</span>, previewTo: <span class="type">Surface</span>, recordTo: <span class="type">Surface</span>)</span></span>: Observable&lt;<span class="built_in">Boolean</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.just(<span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">close</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//純預覽，什麼動作都不做</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">startPreview</span><span class="params">(surface: <span class="type">List</span>&lt;<span class="type">Surface</span>&gt;)</span></span>: Observable&lt;<span class="built_in">Boolean</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.just(<span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">close</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>兩個主要方法都回傳了 Observable<boolean>，是為了要先讓編譯器通過，沒什麼特別的原因。</boolean></p>
-<p>回顧一下架構圖，我們若想要讓Camera的資料流入到UI上，必須提供 surface ，而這裡兩個預覽的主要function就是 </p>
-<ol>
-<li>startPreview(surface: Surface)</li>
-<li>startPreviewForRecording(savePath: String, previewTo: Surface, recordTo: Surface)</li>
-</ol>
-<p>對於CameraCaptureSession來說，他並不用知道Surface到底來自哪裡，但是我們的App是需要知道Surface的用途，因此針對需求，startPreviewForRecording，必須要有一個是預覽用的，給使用者看的；一個是錄影用的，提供給錄影器用的。</p>
+<p>回顧一下架構圖，我們若想要讓Camera的資料流入到UI上，必須提供 surface ，而這裡預覽的主要function就是 </p>
+<ul>
+<li>startPreview(surface: List<surface>)</surface></li>
+</ul>
+<p>對於CameraCaptureSession來說，他並不用知道Surface到底來自哪裡，但是我們的App是需要知道Surface的用途，因此針對需求，我們要自行取找到哪些 Surface 並設定給 Session。</p>
 <p>close()，既然有開就有關閉，所以也要先寫出來。</p>
 <p>接下來，補上兩個重點方法，一個是 kt的init 和 openCamera：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">init &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">openCamera</span><span class="params">()</span></span>: Observable&lt;<span class="built_in">Boolean</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.just(<span class="literal">false</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -397,7 +396,7 @@
 <p>我使用了 1080x1920 對 Texture BufferSize設定，然後開始輸出，就得到錯誤說無法支援的preivew size，可是這時候若選擇了 1440x1088 又會發生什麼事情？ 你的畫面會被嚴重拉伸，比例很不正常。</p>
 <p>要取得最佳大小，是先用 Screen 的 短/長 = Ratio 得到的是正常寬高比，所以我們要用 Screen.width / Screen.height。</p>
 <p>以這個假設例子來看，得到的是 9:16 , 顛倒則是 16:9 之比例，所以我們要找的正常比值應是 16:9 的輸出品質，Video就會是第一個：1280x720；Preview則是第二個：1280x720。</p>
-<p>正常手機的preview應該會有 16:9 的 1080p 顯示，不過我這裡有一支手機測試起來確實只有到1440x1088，研判Screen之所以會有 1080x1920 的輸出，應該是其解析度(dpi)較高的關係。</p>
+<p>正常手機的preview應該會有 16:9 的 1080p 顯示，不過我這裡有一支手機前鏡頭可能不太好，測試起來確實只有到1440x1088，研判Screen之所以會有 1080x1920 的輸出，應該是其解析度(dpi)較高的關係。</p>
 <p>那麼渲染1280x720的圖像到1920x1080像素上時，是一定會有模糊感的差距，但如果為了解決掉full screen不拉伸，必須要捨棄掉一些東西，所以這個做法是比較恰當的。</p>
 <p>當然你也可以去制定設定值，比如我要App可以支援 1080p、720p、480p的錄製，那麼在預覽到手機上的時候就要照著你拿到的Preview比例去對TextureView做畫面寬高設定。</p>
 <p>假如我要以1440x1088輸出1080p高解析度的時候，為了符合比例值，通常會將螢幕的寬縮短、高縮短，兩邊對稱1440x1088的比例，那麼就會正常。</p>
