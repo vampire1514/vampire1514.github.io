@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/model.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/Android-Camera2-Guide/ori2.png">
-<meta property="og:updated_time" content="2018-08-31T09:31:56.864Z">
+<meta property="og:updated_time" content="2018-08-31T10:06:34.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (一)">
 <meta name="twitter:description" content="Android Studio 環境配置 Android 6.0 minSdkVersion 21 targetSdkVersion 27 Language：Kotlin 第三方使用套件：RxJava2  程度需求 對 kotlin 有一定程度了解 對 多執行緒 與 執行緒安全 有基礎概念 對 物件導向的繼承、抽象、封裝有基本觀念 熟悉 RxJava2 難易度：★★★☆☆  之所以列出程度需求，並不">
@@ -385,12 +385,12 @@
 <ol>
 <li>CameraManager 取得 CameraCameraCharacteristics，利用這些特徵描述先得知相關訊息，比如我想要先知道相機可以預覽的大小有多少，然後選出最適合的大小輸出到手機銀幕上的 Size</li>
 <li>用 CameraManager openCamera，開啟成功之後，會得到 CameraDevice</li>
-<li>用 CameraDevice 產生 CameraRequest , CameraCaptureSession</li>
+<li>用 CameraDevice 產生 CaptureRequest , CameraCaptureSession</li>
 <li>用 CameraCaptureSession 搭配指令要求，請求相機開始輸入資料並將資料輸出到對應輸出上</li>
 </ol>
 <p>以上四點流程，其中還有很多細節，之後會一一說明。</p>
 <p>其中 CameraCaptureSession 所代表的就是中介者，輸入流來自相機，輸出流有很多，可能是 SurfaceView,TextureView,MediaRecorder,ImageReader etc.</p>
-<p>其中 CameraRequest 所代表的就是指令驅動，這裡你可以下達我要開啟3A自動模式還是手動控制模式，我要讓相機集中放大哪一區塊顯示，或是讓拍照的結果解析度控制在哪個解析度上。</p>
+<p>其中 CaptureRequest 所代表的就是指令驅動，這裡你可以下達我要開啟3A自動模式還是手動控制模式，我要讓相機集中放大哪一區塊顯示，或是讓拍照的結果解析度控制在哪個解析度上。</p>
 <p>當然，Camera1 API 就讓人熟知的就是相機成像的旋轉方向和銀幕方向是彼此相差90度的這個問題，想當然Camera2 應該也會知道這個問題，但是Camera2 不再讓開發者直接進行物理性旋轉。</p>
 <p>簡單的說就是，setDisplayOrientation 在 Camera2 上沒有相等的設置了。</p>
 <p>那怎麼辦，其實我研究了一兩個禮拜，得到的結果是：當 Session 渲染資料到Surface上的時候，如果你的銀幕比例剛好等於(也可以不用差太多)你的預覽和錄影結果比例就並不會因為你手持手機旋轉到各個角度之後產生拉伸的問題。</p>
