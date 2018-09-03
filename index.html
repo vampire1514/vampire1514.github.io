@@ -332,7 +332,10 @@
       
         
           
-            
+            <h2 id="重點整理"><a href="#重點整理" class="headerlink" title="重點整理"></a>重點整理</h2><ul>
+<li>打開相機，完成 full screen 預覽</li>
+</ul>
+<h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2>
           
         
       
@@ -472,7 +475,12 @@
 
       
         
-          <h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>New一個新專案出來，在activity_main.xml上先拉個畫面出來吧！很簡單，我們就一個 TextureView、一個 Button就行，完成以下：</p>
+          <h2 id="重點整理"><a href="#重點整理" class="headerlink" title="重點整理"></a>重點整理</h2><ul>
+<li>實作 CameraCore class</li>
+<li>完成 video size , preview size , sensor orientaion 的讀取</li>
+<li>成功打開相機</li>
+</ul>
+<h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>New一個新專案出來，在activity_main.xml上先拉個畫面出來吧！很簡單，我們就一個 TextureView、一個 Button就行，完成以下：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;android.support.constraint.ConstraintLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:app=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:background=<span class="string">"#000000"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">    tools:context=<span class="string">".MainActivity"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextureView</span><br><span class="line">        android:id=<span class="string">"@+id/surface"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"match_parent"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Button</span><br><span class="line">        android:id=<span class="string">"@+id/btnRecord"</span></span><br><span class="line">        android:layout_width=<span class="string">"0dp"</span></span><br><span class="line">        android:layout_height=<span class="string">"45dp"</span></span><br><span class="line">        android:layout_marginBottom=<span class="string">"15dp"</span></span><br><span class="line">        android:layout_marginEnd=<span class="string">"18dp"</span></span><br><span class="line">        android:layout_marginStart=<span class="string">"18dp"</span></span><br><span class="line">        android:text=<span class="string">"錄影"</span></span><br><span class="line">        android:textSize=<span class="string">"16sp"</span></span><br><span class="line">        app:layout_constraintBottom_toBottomOf=<span class="string">"parent"</span></span><br><span class="line">        app:layout_constraintLeft_toLeftOf=<span class="string">"parent"</span></span><br><span class="line">        app:layout_constraintRight_toRightOf=<span class="string">"parent"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
 <p>接著到 styles.xml 裡的AppTheme增加以下兩行程式碼：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 取消系統預設的 tool bar --&gt;</span><br><span class="line">&lt;item name=&quot;windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">&lt;item name=&quot;windowActionBar&quot;&gt;false&lt;/item&gt;</span><br></pre></td></tr></table></figure>
