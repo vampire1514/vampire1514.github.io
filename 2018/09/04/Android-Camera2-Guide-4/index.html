@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度  注意，這裡以人拿著手機用後鏡頭來看，所以要以我面對著一個人拿著手機，那個人按他的順時針旋轉(0~360)，而我面對著他，所以看到的是逆時針旋轉  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。">
+<meta name="description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度 在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 以下原因解說僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Camera2 API 錄影開發歷程 (四)">
 <meta property="og:url" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/index.html">
 <meta property="og:site_name" content="Lex&#39;s Vision">
-<meta property="og:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度  注意，這裡以人拿著手機用後鏡頭來看，所以要以我面對著一個人拿著手機，那個人按他的順時針旋轉(0~360)，而我面對著他，所以看到的是逆時針旋轉  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。">
+<meta property="og:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度 在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 以下原因解說僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/ori2.png">
 <meta property="og:image" content="https://hexus.net/media/uploaded/2016/9/12cb2535-5b8e-4732-abfd-d05929823525.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/result1.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/capture2.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/result2.png">
-<meta property="og:updated_time" content="2018-09-05T06:55:44.631Z">
+<meta property="og:updated_time" content="2018-09-05T07:16:01.703Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (四)">
-<meta name="twitter:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度  注意，這裡以人拿著手機用後鏡頭來看，所以要以我面對著一個人拿著手機，那個人按他的順時針旋轉(0~360)，而我面對著他，所以看到的是逆時針旋轉  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。">
+<meta name="twitter:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度 在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 以下原因解說僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影">
 <meta name="twitter:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4/ori2.png">
 
 
@@ -350,9 +350,6 @@
 <li>完成錄影</li>
 </ul>
 <h2 id="相機角度與螢幕角度"><a href="#相機角度與螢幕角度" class="headerlink" title="相機角度與螢幕角度"></a>相機角度與螢幕角度</h2><img src="/2018/09/04/Android-Camera2-Guide-4/ori2.png" title="Sample">
-<blockquote>
-<p>注意，這裡以人拿著手機用後鏡頭來看，所以要以我面對著一個人拿著手機，那個人按他的順時針旋轉(0~360)，而我面對著他，所以看到的是逆時針旋轉</p>
-</blockquote>
 <p>在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。</p>
 <p>以下原因解說僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。</p>
 <h3 id="相機角度"><a href="#相機角度" class="headerlink" title="相機角度"></a>相機角度</h3><p>相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影像會是跟實景相反的圖像。傳統的相機，針孔就是鏡頭，鏡頭透過光反射到相機內部的底片形成影像後，我們再去沖洗照片。</p>
@@ -379,6 +376,9 @@
 <img src="/2018/09/04/Android-Camera2-Guide-4/camera1.png" title="Question">
 <p>圖中我有標示翻回0度後的 Sensor 結果，這個翻轉是我面對著 Sensor 順時針的規則翻轉回去，而原本是90度，所以要轉回0度必須逆時針轉回去，然後一一順時針轉一圈，其螢幕和Sensor的結果如下：</p>
 <img src="/2018/09/04/Android-Camera2-Guide-4/ori1.png" title="Orientation">
+<blockquote>
+<p>注意，這裡以人拿著手機用後鏡頭來看，所以要以我面對著一個人拿著手機，那個人按他的順時針旋轉(0~360)，而我面對著他，所以看到的是逆時針旋轉</p>
+</blockquote>
 <p>接著，定義 Sensor 的 x,y 軸：長邊為 x render方向，短邊是 y render方向。我們來看一下用後鏡頭的兩個拍攝手法影響的結果輸出：</p>
 <ul>
 <li>自然拍攝 (螢幕0度)</li>
@@ -394,7 +394,7 @@
 <img src="/2018/09/04/Android-Camera2-Guide-4/result2.png" title="Result_2">
 <p>就上面兩個範例來看，有看出端倪了嗎？ Image Sensor的 Render方向是硬體的限制，該用什麼樣的位置進行讀取和輸出都是已經限制好的，並不會像螢幕一樣轉換到其他角度之後，座標系依然是左上角。所以在自然拍攝的時候，出現的結果不合我們想像的預期，但是這在物理現象上是絕對正常的一件事情。</p>
 <p>而且重點是，當我們自然拿著手機的時候，能拍攝的實景變窄了，可以看一下自然拍攝和橫著拍攝的結果。背景的部分如果是自然拍攝，則不會攝入寬廣的背景，而橫著拍攝的時候，就會發現攝入的背景變多了。</p>
-<h3 id="前鏡頭與後鏡頭的關係"><a href="#前鏡頭與後鏡頭的關係" class="headerlink" title="前鏡頭與後鏡頭的關係"></a>前鏡頭與後鏡頭的關係</h3>
+
       
     </div>
     
@@ -571,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重點整理"><span class="nav-number">1.</span> <span class="nav-text">重點整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相機角度與螢幕角度"><span class="nav-number">2.</span> <span class="nav-text">相機角度與螢幕角度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相機角度"><span class="nav-number">2.1.</span> <span class="nav-text">相機角度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#與螢幕角度的關係是？"><span class="nav-number">2.2.</span> <span class="nav-text">與螢幕角度的關係是？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前鏡頭與後鏡頭的關係"><span class="nav-number">2.3.</span> <span class="nav-text">前鏡頭與後鏡頭的關係</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重點整理"><span class="nav-number">1.</span> <span class="nav-text">重點整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相機角度與螢幕角度"><span class="nav-number">2.</span> <span class="nav-text">相機角度與螢幕角度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相機角度"><span class="nav-number">2.1.</span> <span class="nav-text">相機角度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#與螢幕角度的關係是？"><span class="nav-number">2.2.</span> <span class="nav-text">與螢幕角度的關係是？</span></a></li></ol></li></ol></div>
             
 
           </div>
