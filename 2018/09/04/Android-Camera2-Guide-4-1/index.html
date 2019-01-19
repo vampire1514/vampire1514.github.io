@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度後鏡頭與相機的關係圖：  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 本章論述僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Camera2 API 錄影開發歷程 (四)">
+<meta property="og:url" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/index.html">
+<meta property="og:site_name" content="Lex&#39;s Vision">
+<meta property="og:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度後鏡頭與相機的關係圖：  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 本章論述僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://hexus.net/media/uploaded/2016/9/12cb2535-5b8e-4732-abfd-d05929823525.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/camera1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/camera2.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/output1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/example1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/example2.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/device90.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/device270.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/table.png">
+<meta property="og:updated_time" content="2018-09-07T10:00:04.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Camera2 API 錄影開發歷程 (四)">
+<meta name="twitter:description" content="重點整理 解說相機角度與螢幕角度對輸出實際影響之後的影響 完成錄影  相機角度與螢幕角度後鏡頭與相機的關係圖：  在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。 本章論述僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。 相機角度相機基本原理，是光和影像通過針孔映射在一">
+<meta name="twitter:image" content="https://hexus.net/media/uploaded/2016/9/12cb2535-5b8e-4732-abfd-d05929823525.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/"/>
+
+
+
+
+
+  <title>Android Camera2 API 錄影開發歷程 (四) | Lex's Vision</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lex's Vision</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lex">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lex's Vision">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Camera2 API 錄影開發歷程 (四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-09-04T18:34:01+08:00">
+                2018-09-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="重點整理"><a href="#重點整理" class="headerlink" title="重點整理"></a>重點整理</h2><ul>
+<li>解說相機角度與螢幕角度對輸出實際影響之後的影響</li>
+<li>完成錄影</li>
+</ul>
+<h2 id="相機角度與螢幕角度"><a href="#相機角度與螢幕角度" class="headerlink" title="相機角度與螢幕角度"></a>相機角度與螢幕角度</h2><p>後鏡頭與相機的關係圖：</p>
+
+<p>在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。</p>
+<p>本章論述僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。</p>
+<h3 id="相機角度"><a href="#相機角度" class="headerlink" title="相機角度"></a>相機角度</h3><p>相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影像會是跟實景相反的圖像。傳統的相機，針孔就是鏡頭，鏡頭透過光反射到相機內部的底片形成影像後，我們再去沖洗照片。</p>
+<p>goole 一下相機基本構造就可以得到相關圖例，我就不再貼網站上來囉。</p>
+<p>現今的數位相機或是手機上的相機，已經不再使用底片的方式感測圖像，改用了電子的感光元件。早期一般都是利用 CCD 感光元件進行影像感測，後期幾乎所有手機相機已經都使用了較為便宜的 CMOS 元件。</p>
+<p>不論是 CCD 還是 CMOS，它們都是一種感光的元件，通過鏡頭入射進來的光成像通過這個元件進行一點一點像素的讀取，輸入到 memory成為圖片。</p>
+<p>我找了一張手機與CMOS image sensor 的關係架構圖：</p>
+<ul>
+<li>出處：<a href="https://hexus.net/" target="_blank" rel="noopener">https://hexus.net/</a><br><a href="https://hexus.net/" target="_blank" rel="noopener"><img src="https://hexus.net/media/uploaded/2016/9/12cb2535-5b8e-4732-abfd-d05929823525.jpg" alt="Lens&amp;CMOS"></a></li>
+</ul>
+<p>從鏡頭結構一路往下看，最後會看到一塊彩色的矩形，那個就是 CMOS image sensor，這張的架構圖很剛好可以說明一件事情，就是這個 Image sensor它是直立的焊在手機的電路板上，如果以順時針左上角為原點來看，就是旋轉了90度或是270度。</p>
+<a id="more"></a>
+<p>首先，要先引述一下 google api中的SENSOR_ORIENTATION：<a href="https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html#SENSOR_ORIENTATION" target="_blank" rel="noopener">Link</a></p>
+<p>上面講到，輸出圖片需要通過該角度做順時針旋轉以直立在設備的自然方向。</p>
+<p>同時也定義了 rolling shutter readout 的方向，該方向來自sensor由上到下的座標系統。</p>
+<p>正常的Sensor一般來說都是寬長高短，像是4:3 , 16:9 這種比例，所以CMOS是一種感測元件用來將光成像變成圖片，自然的圖片可以輸出的解析度一定跟CMOS這個規格有關。</p>
+<p>CMOS Sensor上一定會標示一個規格：(H)x(V)，這個意思類似是1920(H) x 1080(V) 的講法，也就是我有多少個像素點。</p>
+<p>rolling shutter readout，是CMOS大多數讀取資料的方式，有點像是傳統快門相機的捲簾式快門，但今天要說明的不是rolling shutter readout，而是旋轉角度。</p>
+<p>假設今天感測元件規格是：1920(H) x 1080(V)，這塊Sensor不太可能會以這樣的方式設計在手機上：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/camera1.png" title="Sensor">
+<p>紅色區塊就是Sensor，如果是這樣設計的話，這時將手機轉成90度，你會發現這個Sensor變成直立的。</p>
+<p>這就跟我們手持手機的自然方向衝突了，所以通常Sensor會被安裝成與螢幕差90度角，然後在通過圖片資料輸出到系統後，系統對這張圖片做了旋轉處理。</p>
+<h3 id="前後鏡頭角度跟螢幕的關係"><a href="#前後鏡頭角度跟螢幕的關係" class="headerlink" title="前後鏡頭角度跟螢幕的關係"></a>前後鏡頭角度跟螢幕的關係</h3><p>這時候就要講一下API上，輸出圖片需要通過該角度做順時針旋轉以直立在設備的自然方向，這句話的意思了。</p>
+<p>假設正常硬體設計應該會是這樣：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/camera2.png" title="Sensor">
+<p>簡單一點的思考方式就是，系統已經幫我們處理好需要90度旋轉的原始輸出圖片，而且這張圖片一定是寬比高長。</p>
+<p>我們先看一下，從手機前後鏡頭在螢幕各角度時會從Sensor讀出的圖片(這已經是我確實從手機測出來的結果)：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/output1.png" title="Output">
+<p>假如還不太了解，可以先記憶一件事情就好：記住手機0度的位置和輸出的方位，手機開始旋轉到90 , 180 , 270 的時候，就以順時針方式把0度的輸出旋轉就是結果。</p>
+<p>這個方式前鏡頭也是一樣，所以90度的時候你就發現他整個顛倒過來了。理論上前鏡頭和後鏡頭，應該要是順時針相差180度才是一台手機合理的硬體配置。</p>
+<p><em>備註：為何會說理論上，是因為還真的在其他討論Android開發相機的文章上看到有人遇到前後各270度的詭異情況，所以我沒有把這種配置定義成絕對。</em></p>
+<h3 id="探討成像原因"><a href="#探討成像原因" class="headerlink" title="探討成像原因"></a>探討成像原因</h3><p>之所以一開始先提到 CMOS Image Sensor的原因，其實是為了明確的說明 SENSOR_ORIENTATION 這個參數的意義：</p>
+<ul>
+<li>輸出圖片需要通過該角度做順時針旋轉以直立在設備的自然方向。</li>
+</ul>
+<blockquote>
+<p>請注意這句話的意思有：</p>
+<p>第一點：在API文檔中沒有提到 Sensor 這個硬體是被旋轉了幾度，只有說輸出圖片，就連原文也沒有提到。</p>
+<p>第二點：什麼是以直立在設備自然方向，設備自然方向制訂於手機本身有一個Sensor，它的初始值在某一方向的時候是為0，當開始順時針轉的時候，這個值會開始增加，範圍是 0 ~ 360。通常這個Sensor會對齊手機正上方，簡單的說，螢幕的上緣朝上就是0度的起點。</p>
+</blockquote>
+<p>這裡先用圖解說一下，以設備0度搭配 Sensor 0度的示意：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/example1.png" title="Output">
+<p>然後依循API說明的：『通過該角度做順時針旋轉以直立在設備的自然方向』的意思，這張輸出圖片其實已經跟上緣對齊了，所以他沒有旋轉的必要，因此參數會是0度。</p>
+<p>可是先前針對影像的寬高比曾說過，寬比高大是一種正常相機的圖片成像，只因為我們拿手機的方式是直立(設備自然方向也就是上緣朝上)，而畫面也是直立輸出，且高比寬大。</p>
+<p>所以來自相機的影像，如果還是攝像範圍還是這麼寬，將其圖片輸出到直立的螢幕時，就需要利用 scale 縮放的方式去呈現，scale type有幾項：fitXY,centerCrop, fitStart etc.</p>
+<p>非常多，自己查查就可以得到了，但是這都不是重點，因為手機設置為了正常自然成像，這個Sensor通常是直立的貼在手機上，也可以說是原本這個Sensor是被旋轉90度或是270度在手機上，但我認為這跟像素讀取較無關係，跟旋轉比較有大的關聯性。</p>
+<p>這是一張，設備0度搭配 Sensor 90度的示意：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/example2.png" title="Output">
+<p>那麼，Sensor 90度，API上說到：『通過該角度以順時針旋轉』，首先我們先想像一下圖中的那一個人的圖片，現在已經是高比寬大的結果了，可是注意一件事情，相機的圖片是 寬(H)x高(V) 而成，而通常寬比高大。</p>
+<p>所以說，當你想要看這張圖片的時候，只要你在拍照的同時沒有設定對圖片做90度旋轉，然後開啟手機內的圖片App去查看圖片時，這時應該會以 scale centerInside 的方式呈現在螢幕上。然後，你會看到這張圖片被逆時針轉了90度，保持了寬高比例呈現在螢幕中間。</p>
+<p>以前我在Camera1碰到這個情況的時候，我就想說，啊！那就直接旋轉90度就好了，反正SENSOR_ORIENTATION給了我90度，應該是要我旋轉90度的吧！但是當設備90度拍攝的時候，卻又不該轉90度，然後設備轉180度拍攝的時候，我轉了90度，看到了一張顛倒成像的照片。</p>
+<p>這時候就覺得很奇怪，好在是當時最後該App的產品規格明確定義：沒有寬螢幕顯示，只能直立顯示來使用。</p>
+<p>當我新接觸Camera2，我想要弄明白一點這個關係，想來想去終於明白，當 SENSOR_ORIENTAION = 90 的時候，到底代表著什麼意義。請先看一下示意圖：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/device90.png" width="90">
+<p>再來講一下，在API中的一個關鍵名詞：</p>
+<p>needs to be rotated to be 「upright」 on the device screen in its native orientation.</p>
+<p>然後後面接著補充，直立在哪？ on the device screen in its 「native orientation」.</p>
+<p>看到 native orientation了嗎，這個並不是指當設備轉到該角度後的左上x,y座標系，orientation 表明的意思是安排，coordinate才有座標的意味。</p>
+<p>正確的解釋應該是，設備螢幕安排的自然方向(請注意看紅色箭頭)，輸出的圖片必須旋轉後直立對齊於它，所以我們可以這樣推論一件事情：每個輸出圖片都應旋轉某角度後，正常對齊設備螢幕上方。</p>
+<p>因此在 SENSOR_ORIENTATION = 90時：</p>
+<ul>
+<li>當直立拍攝而設備0度，結果圖被逆轉90度，以方便之後將結果旋轉90度符合拍攝時的螢幕方向</li>
+<li>當橫立拍攝而設備90度，結果圖正常，也可以不用旋轉，如果你旋轉90度之後，也是跟著當時90度設備的上緣，符合拍攝時的螢幕方向。</li>
+<li>當直立拍攝而設備180度(倒立手機)，上下顛倒的圖片被逆轉90度，以方便之後將結果旋轉90度符合拍攝時的螢幕方向</li>
+<li>當橫立拍攝而設備270度，結果圖上下相反，將其旋轉90度之後，符合拍攝時的螢幕方向。</li>
+</ul>
+<p>這也就是為什麼，當你用手機180度拍攝一個人時，照片出來的結果是整個人身朝右方，好像原始圖片正轉了它90度，其實應該是這張圖片是上下顛倒的照片然後逆轉90度。</p>
+<p>這時，只要將此照片正轉90度，就會知道當時拍攝的角度是180度顛倒成像，這是硬體的限制，如果要正確的符合人所看的景象，應該是要把這張照片轉270度，即照片正常呈現。</p>
+<p>同理，270度因為他相反成像，所以想要正確的符合攝像景象，你要轉它180度，即照片正常呈現。</p>
+<h3 id="前鏡頭-SENSOR-ORIENTATION-270"><a href="#前鏡頭-SENSOR-ORIENTATION-270" class="headerlink" title="前鏡頭 SENSOR_ORIENTATION = 270"></a>前鏡頭 SENSOR_ORIENTATION = 270</h3><p>接下來，要將上述的理論推到前鏡頭上，一開始一定馬上就會發現一個不同的參數值：SENSOR_ORIENTATION = 270。</p>
+<p>還記得設備90度時，圖片正常不旋轉的示意圖嗎？ 當你使用前鏡頭的時候，你發現這張圖片變成了上下顛倒的照片。當然很快就會有人知道其實只要將後鏡頭的輸出上下顛倒來看就好了。</p>
+<p>是的沒錯，270 - 90 = 180，這是正確的算法，所以只要將 SENSOR_ORIENTATION = 90 的結果統一加180度就可以了。</p>
+<p>！！到這裡其實可以跳過了，當然如果還想繼續的話在跟著一起往下探討！！</p>
+<p>之前已經講解完 SENSOR_ORIENTATION 的意思，這裡我們就直接從設備0度開始討論：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/device270.png" width="270">
+<ol>
+<li>前鏡頭和後鏡頭一樣，都被直立貼在手機上</li>
+<li>前鏡頭一樣遵循 SENSOR_ORIENTATION 規則，要將輸出圖片做處理，利於之後對齊</li>
+<li>結合以上兩點，請將0度的那張照片順時針做270度旋轉對齊螢幕上緣後，你就會看到直立拍攝結果</li>
+</ol>
+<p>然後這裡有個非常大的輸出差異：在前鏡頭 SENSOR_ORIENTATION = 270 的時候，你會看到以下結果：</p>
+<ul>
+<li>90度時被旋轉了180度</li>
+<li>0度時轉了90度</li>
+<li>180度逆轉了90度</li>
+<li>270度好像正常沒有轉</li>
+</ul>
+<p>先說明90度和270度的差異好了，事實上我們看到圖中設備90度時，圖片被轉了180，而設備270度時，圖片照正常輸出，像是沒有轉一樣。但是，該參數在API上說了，必須要用這個角度讓輸出圖片旋轉以符合拍攝的設備螢幕的方向。</p>
+<p>這著這個說法，請把上面的示意圖中，每個設備方向的人物照片結果，通通翻轉270度看看！你就會發現每個結果都會符合拍攝時的螢幕方向。換句話說！SENSOR_ORIENTATION = 270的時候，所有輸出圖像全部都有被處理過，要一一自己通過圖像的旋轉結果去驗證才會發現。</p>
+<p>其實為何 SENSOR_ORIENTATION 在前鏡頭的時候等於270，我想可能是因為大部分右撇子的使用者單手拿手機橫著自拍的關係吧，否則一般這個參數應該都直接設定SENSOR_ORIENTATION=90就可以了，像有的手機後鏡頭有兩個，兩個就都是SENSOR_ORIENTATION=90。</p>
+<h3 id="旋轉角度對應之計算"><a href="#旋轉角度對應之計算" class="headerlink" title="旋轉角度對應之計算"></a>旋轉角度對應之計算</h3><p>理解後鏡頭與前鏡頭互相的對齊之後，我們可以列出一個換算表格：</p>
+<img src="/2018/09/04/Android-Camera2-Guide-4-1/table.png" title="Table">
+<p>說實在，討論了這麼多東西，都是為了這個表格，接著我們要以這個表格在錄影的時候，將錄影的結果進行 orientation 的變換！</p>
+<p>請先建立一個 class 命名為：VideoRecorder，然後我們要建立兩個二維陣列做查表的動作，這裏直接使用 google 範例中寫好的 SparseIntArray，總共有兩個：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VideoRecorder</span> </span>&#123;</span><br><span class="line">	<span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">val</span> SENSOR_ORIENTATION_DEFAULT_DEGREES = <span class="number">90</span></span><br><span class="line">        <span class="keyword">val</span> SENSOR_ORIENTATION_INVERSE_DEGREES = <span class="number">270</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> DEFAULT_ORIENTATIONS = SparseIntArray().apply &#123;</span><br><span class="line">            append(Surface.ROTATION_0, <span class="number">90</span>)</span><br><span class="line">            append(Surface.ROTATION_90, <span class="number">0</span>)</span><br><span class="line">            append(Surface.ROTATION_180, <span class="number">270</span>)</span><br><span class="line">            append(Surface.ROTATION_270, <span class="number">180</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> INVERSE_ORIENTATIONS = SparseIntArray().apply &#123;</span><br><span class="line">            append(Surface.ROTATION_0, <span class="number">270</span>)</span><br><span class="line">            append(Surface.ROTATION_90, <span class="number">180</span>)</span><br><span class="line">            append(Surface.ROTATION_180, <span class="number">90</span>)</span><br><span class="line">            append(Surface.ROTATION_270, <span class="number">0</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>SENSOR_ORIENTATION_DEFAULT_DEGREES = 後鏡頭<br>SENSOR_ORIENTATION_INVERSE_DEGREES = 前鏡頭</p>
+</blockquote>
+<p>這裏 google的命名其實滿貼切的，雖然沒有直接叫前後，但他用了 DEFAULT 和 INVERSE，把形容鏡頭的意義在抽象化一層，這樣如果有些後鏡頭得到的參數是270時，就不會衝突這個命名。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/03/Android-Camera2-Guide-3/" rel="next" title="Android Camera2 API 錄影開發歷程 (三)">
+                <i class="fa fa-chevron-left"></i> Android Camera2 API 錄影開發歷程 (三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/11/Android-UnitTest-1/" rel="prev" title="Android UnitTest-1">
+                Android UnitTest-1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lex</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/vampire1514" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="wmliy343@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/wang.lex.5" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重點整理"><span class="nav-number">1.</span> <span class="nav-text">重點整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相機角度與螢幕角度"><span class="nav-number">2.</span> <span class="nav-text">相機角度與螢幕角度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相機角度"><span class="nav-number">2.1.</span> <span class="nav-text">相機角度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前後鏡頭角度跟螢幕的關係"><span class="nav-number">2.2.</span> <span class="nav-text">前後鏡頭角度跟螢幕的關係</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探討成像原因"><span class="nav-number">2.3.</span> <span class="nav-text">探討成像原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前鏡頭-SENSOR-ORIENTATION-270"><span class="nav-number">2.4.</span> <span class="nav-text">前鏡頭 SENSOR_ORIENTATION = 270</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#旋轉角度對應之計算"><span class="nav-number">2.5.</span> <span class="nav-text">旋轉角度對應之計算</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2011 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lex</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user">訪客人數</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye">閱讀次數</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

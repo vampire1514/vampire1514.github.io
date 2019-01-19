@@ -239,6 +239,287 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/Android-UnitTest-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lex">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lex's Vision">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Android-UnitTest-1/" itemprop="url">Android UnitTest-1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-09-11T10:57:00+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/Android-Camera2-Guide-4-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lex">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lex's Vision">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/04/Android-Camera2-Guide-4-1/" itemprop="url">Android Camera2 API 錄影開發歷程 (四)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-09-04T18:34:01+08:00">
+                2018-09-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="重點整理"><a href="#重點整理" class="headerlink" title="重點整理"></a>重點整理</h2><ul>
+<li>解說相機角度與螢幕角度對輸出實際影響之後的影響</li>
+<li>完成錄影</li>
+</ul>
+<h2 id="相機角度與螢幕角度"><a href="#相機角度與螢幕角度" class="headerlink" title="相機角度與螢幕角度"></a>相機角度與螢幕角度</h2><p>後鏡頭與相機的關係圖：</p>
+
+<p>在Android Camera2 API 錄影開發歷程 (一)的時候，曾經提過這個被旋轉的圖像輸出，現在就要正式的講解更詳細的原因，以及相機硬體與螢幕的設計規則。</p>
+<p>本章論述僅為個人的認知，並不代表百分之百一定完全正確，如有錯誤可以指正。</p>
+<h3 id="相機角度"><a href="#相機角度" class="headerlink" title="相機角度"></a>相機角度</h3><p>相機基本原理，是光和影像通過針孔映射在一個平面上，然後這個影像會是跟實景相反的圖像。傳統的相機，針孔就是鏡頭，鏡頭透過光反射到相機內部的底片形成影像後，我們再去沖洗照片。</p>
+<p>goole 一下相機基本構造就可以得到相關圖例，我就不再貼網站上來囉。</p>
+<p>現今的數位相機或是手機上的相機，已經不再使用底片的方式感測圖像，改用了電子的感光元件。早期一般都是利用 CCD 感光元件進行影像感測，後期幾乎所有手機相機已經都使用了較為便宜的 CMOS 元件。</p>
+<p>不論是 CCD 還是 CMOS，它們都是一種感光的元件，通過鏡頭入射進來的光成像通過這個元件進行一點一點像素的讀取，輸入到 memory成為圖片。</p>
+<p>我找了一張手機與CMOS image sensor 的關係架構圖：</p>
+<ul>
+<li>出處：<a href="https://hexus.net/" target="_blank" rel="noopener">https://hexus.net/</a><br><a href="https://hexus.net/" target="_blank" rel="noopener"><img src="https://hexus.net/media/uploaded/2016/9/12cb2535-5b8e-4732-abfd-d05929823525.jpg" alt="Lens&amp;CMOS"></a></li>
+</ul>
+<p>從鏡頭結構一路往下看，最後會看到一塊彩色的矩形，那個就是 CMOS image sensor，這張的架構圖很剛好可以說明一件事情，就是這個 Image sensor它是直立的焊在手機的電路板上，如果以順時針左上角為原點來看，就是旋轉了90度或是270度。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/04/Android-Camera2-Guide-4-1/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/03/Android-Camera2-Guide-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -919,7 +1200,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">文章</span>
                 </a>
               </div>
@@ -991,7 +1272,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2011 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2011 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
